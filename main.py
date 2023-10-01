@@ -10,7 +10,7 @@ def hello_world():
 
 @app.route("/<goal>/<int:days>")
 def goals(goal, days):
-    return f"<h1 style='text-align:center;'>Your goal: {goal} <br /> Days to reach it: {days}</h1>"
+    return render_template("goals_tracker.html", goal=goal, days=days)
 
 
 if __name__ == "__main__":
