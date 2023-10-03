@@ -9,5 +9,30 @@
     <h1>Hello, let's track some goals!</h1>
     <img src="./static/assets/img/logo.png" alt="Goals Minder application logotype with mountains">
 	<p><a href="{{ url_for('register') }}">Register</a></p>
+	<h2>Login</h2>
+	<!-- Display flashed messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+	<form method="POST" action="{{ url_for('index') }}">
+		{{ form.hidden_tag() }}
+		<div>
+			<label for="email">Email:</label>
+			{{ form.email(size=30) }}
+		</div>
+		<div>
+			<label for="password">Password:</label>
+			{{ form.password(size=30) }}
+		</div>
+		<div>
+			<input type="submit" value="Login">
+		</div>
+	</form>
 	</body>
 </html>
