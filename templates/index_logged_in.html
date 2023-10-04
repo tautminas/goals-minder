@@ -9,5 +9,28 @@
     <h1>Welcome to the Home Page</h1>
     <p>You are logged in</p>
     <a href="{{ url_for('logout') }}">Logout</a>
+
+    <h2>Create a New Goal</h2>
+    <form method="POST" action="{{ url_for('index') }}">
+        {{ form.hidden_tag() }}
+        <div>
+            <label for="description">Goal Description:</label>
+            {{ form.description(size=30) }}
+        </div>
+        <div>
+            <label for="completion_percentage">Completion Percentage:</label>
+            {{ form.completion_percentage(size=3) }}
+        </div>
+        <div>
+            <input type="submit" value="Create Goal">
+        </div>
+    </form>
+
+    <h2>Your Goals:</h2>
+    <ul>
+        {% for goal in user.goals %}
+            <li>{{ goal.description }} - {{ goal.completion_percentage }}% completed</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

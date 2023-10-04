@@ -1,8 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, url_for, flash, session, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, IntegerField, validators
 from wtforms.validators import DataRequired, Email
 import os
 
@@ -18,6 +18,17 @@ class User(db.Model):
     surname = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
+
+    goals = db.relationship('Goal', back_populates='user')
+
+
+class Goal(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(255), nullable=False)
+    completion_percentage = db.Column(db.Integer, nullable=False, default=0)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    user = db.relationship('User', back_populates='goals')
 
 
 with app.app_context():
@@ -36,6 +47,14 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+
+
+class GoalForm(FlaskForm):
+    description = StringField('Goal Description', validators=[validators.DataRequired()])
+    completion_percentage = IntegerField('Completion Percentage', validators=[
+        validators.DataRequired(),
+        validators.NumberRange(min=0, max=100, message='Completion percentage must be between 0 and 100.')
+    ])
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -65,7 +84,22 @@ def register():
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if 'user_id' in session:
-        return render_template("index_logged_in.html")
+        form = GoalForm(request.form)
+        if form.validate_on_submit():
+            description = form.description.data
+            completion_percentage = form.completion_percentage.data
+
+            user = User.query.get(session['user_id'])
+            if user:
+                goal = Goal(description=description, completion_percentage=completion_percentage, user=user)
+                db.session.add(goal)
+                db.session.commit()
+
+                flash('Goal created successfully!', 'success')
+                return redirect(url_for('index'))
+        user = User.query.get(session['user_id'])
+
+        return render_template("index_logged_in.html", form=form, user=user)
     else:
         form = LoginForm()
         if form.validate_on_submit():
