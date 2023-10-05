@@ -27,10 +27,34 @@
     </form>
 
     <h2>Your Goals:</h2>
-    <ul>
-        {% for goal in user.goals %}
-            <li>{{ goal.description }} - {{ goal.completion_percentage }}% completed</li>
-        {% endfor %}
-    </ul>
+<ul>
+    {% for goal in user.goals %}
+    <li>
+        <p>Description: {{ goal.description }}</p>
+        <p>Completion Percentage: {{ goal.completion_percentage }}%</p>
+        <form method="POST" action="{{ url_for('update_goal', goal_id=goal.id) }}">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="new_description">New Description:</label>
+                <input type="text" name="new_description" value="{{ goal.description }}" size="30">
+            </div>
+            <div>
+                <label for="new_completion_percentage">New Completion Percentage:</label>
+                <input type="number" name="new_completion_percentage" value="{{ goal.completion_percentage }}" min="0" max="100">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+        <form method="POST" action="{{ url_for('delete_goal', goal_id=goal.id) }}">
+            {{ form.hidden_tag() }}
+            <div>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
 </body>
 </html>

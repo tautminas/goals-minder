@@ -125,6 +125,42 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/update_goal/<int:goal_id>', methods=['POST'])
+def update_goal(goal_id):
+    goal = Goal.query.get(goal_id)
+
+    if goal:
+        new_description = request.form.get('new_description')
+        new_completion_percentage = request.form.get('new_completion_percentage')
+
+        if new_description is not None:
+            goal.description = new_description
+
+        if new_completion_percentage is not None:
+            goal.completion_percentage = new_completion_percentage
+
+        db.session.commit()
+        flash('Goal updated successfully!', 'success')
+    else:
+        flash('Goal not found!', 'danger')
+
+    return redirect(url_for('index'))
+
+
+@app.route('/delete_goal/<int:goal_id>', methods=['POST'])
+def delete_goal(goal_id):
+    goal = Goal.query.get(goal_id)
+
+    if goal:
+        db.session.delete(goal)
+        db.session.commit()
+        flash('Goal deleted successfully!', 'success')
+    else:
+        flash('Goal not found!', 'danger')
+
+    return redirect(url_for('index'))
+
+
 @app.route("/<goal>/<int:days>")
 def goals(goal, days):
     return render_template("goals_tracker.html", goal=goal, days=days)
