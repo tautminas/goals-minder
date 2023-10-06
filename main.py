@@ -4,9 +4,11 @@ from sqlalchemy import inspect
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField, validators
 from wtforms.validators import DataRequired, Email
+from flask_bcrypt import Bcrypt
 import os
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'
 db = SQLAlchemy(app)
@@ -17,9 +19,15 @@ class User(db.Model):
     name = db.Column(db.String(80), nullable=False)
     surname = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
 
     goals = db.relationship('Goal', back_populates='user')
+
+    def __init__(self, name, surname, email, password):
+        self.name = name
+        self.surname = surname
+        self.email = email
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
 
 class Goal(db.Model):
@@ -89,17 +97,14 @@ def index():
             description = form.description.data
             completion_percentage = form.completion_percentage.data
 
-            user = User.query.get(session['user_id'])
-            if user:
-                goal = Goal(description=description, completion_percentage=completion_percentage, user=user)
-                db.session.add(goal)
-                db.session.commit()
+            goal = Goal(description=description, completion_percentage=completion_percentage, user_id=session['user_id'])
+            db.session.add(goal)
+            db.session.commit()
 
-                flash('Goal created successfully!', 'success')
-                return redirect(url_for('index'))
-        user = User.query.get(session['user_id'])
+            flash('Goal created successfully!', 'success')
+            return redirect(url_for('index'))
 
-        return render_template("index_logged_in.html", form=form, user=user)
+        return render_template("index_logged_in.html", form=form, user=User.query.get(session['user_id']))
     else:
         form = LoginForm()
         if form.validate_on_submit():
@@ -108,7 +113,7 @@ def index():
 
             user = User.query.filter_by(email=email).first()
 
-            if user and user.password == password:
+            if user and bcrypt.check_password_hash(user.password_hash, password):
                 flash('Login successful!', 'success')
                 session['user_id'] = user.id
                 return redirect(url_for('index'))
