@@ -4,35 +4,49 @@
 		<title>Goals Minder</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+		<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 	</head>
 	<body>
-    <h1>Hello, let's track some goals!</h1>
-    <img src="./static/assets/img/logo.png" alt="Goals Minder application logotype with mountains">
-	<p><a href="{{ url_for('register') }}">Register</a></p>
-	<h2>Login</h2>
-	<!-- Display flashed messages -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flash-messages">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-	<form method="POST" action="{{ url_for('index') }}">
-		{{ form.hidden_tag() }}
-		<div>
-			<label for="email">Email:</label>
-			{{ form.email(size=30) }}
+
+	<!-- Sign in -->
+	<section id="title" class="gradient-background">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<h1 class="text-center mt-4">Let's track some goals!</h1>
+					<img src="./static/assets/img/logo.png" class="d-block mx-auto my-4" alt="Goals Minder application logotype with mountains">
+					<h2 class="text-center">Login</h2>
+
+					<!-- Display flashed messages -->
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							<ul class="flash-messages">
+								{% for message in messages %}
+									<li>{{ message }}</li>
+								{% endfor %}
+							</ul>
+						{% endif %}
+					{% endwith %}
+
+					<form method="POST" action="{{ url_for('index') }}">
+						{{ form.hidden_tag() }}
+						<div class="mb-3">
+							<label for="email" class="form-label">Email:</label>
+							{{ form.email(class="form-control") }}
+						</div>
+						<div class="mb-3">
+							<label for="password" class="form-label">Password:</label>
+							{{ form.password(class="form-control") }}
+						</div>
+						<button type="submit" class="btn btn-primary w-100">Login</button>
+					</form>
+					<p class="text-center mt-3"><a href="{{ url_for('register') }}">Create a new account</a></p>
+				</div>
+			</div>
 		</div>
-		<div>
-			<label for="password">Password:</label>
-			{{ form.password(size=30) }}
-		</div>
-		<div>
-			<input type="submit" value="Login">
-		</div>
-	</form>
+	</section>
+
 	</body>
 </html>
