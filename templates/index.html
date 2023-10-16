@@ -1,108 +1,176 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Goals Minder</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-		<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-	</head>
-	<body>
+  <head>
+    <title>Goals Minder</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Sign in -->
+    <section id="title" class="gradient-background">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            <h1 class="text-center mt-4">Track your goals to achieve them!</h1>
+            <h2 class="text-center"></h2>
 
-	<!-- Sign in -->
-	<section id="title" class="gradient-background">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 offset-md-3">
-					<h1 class="text-center mt-4">Track your goals to achieve them!</h1>
-					<h2 class="text-center"></h2>
+            {% with messages = get_flashed_messages() %} {% if messages %}
+            <div class="mt-4 mb-3">
+              <div
+                class="alert alert-info alert-dismissible fade show"
+                role="alert"
+              >
+                {{ messages[-1] }}
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+            {% endif %} {% endwith %}
 
-					{% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            <div class="mt-4 mb-3">
-                                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                    {{ messages[-1] }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endwith %}
+            <form method="POST" action="{{ url_for('index') }}" class="mb-4">
+              {{ form.hidden_tag() }}
+              <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                {{ form.email(class="form-control") }}
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                {{ form.password(class="form-control") }}
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            <a
+              href="{{ url_for('register') }}"
+              class="btn btn-outline-secondary w-100 mb-4"
+              >Create a new account</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
 
-					<form method="POST" action="{{ url_for('index') }}" class="mb-4">
-						{{ form.hidden_tag() }}
-						<div class="mb-3">
-							<label for="email" class="form-label">Email:</label>
-							{{ form.email(class="form-control") }}
-						</div>
-						<div class="mb-3">
-							<label for="password" class="form-label">Password:</label>
-							{{ form.password(class="form-control") }}
-						</div>
-						<button type="submit" class="btn btn-primary w-100">Login</button>
-
-					</form>
-					<a href="{{ url_for('register') }}" class="btn btn-outline-secondary w-100 mb-4">Create a new account</a>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="features">
+    <section id="features">
       <div class="container px-4 py-5" id="hanging-icons">
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
           <div class="col d-flex align-items-start">
             <div
               class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
-                <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-hand-thumbs-up"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"
+                />
               </svg>
             </div>
             <div>
               <h3 class="fs-2 text-body-emphasis">User-Friendly Interface.</h3>
-              <p>Our application is designed with simplicity in mind. Register today and effortlessly manage your objectives.</p>
+              <p>
+                Our application is designed with simplicity in mind. Register
+                today and effortlessly manage your objectives.
+              </p>
             </div>
           </div>
           <div class="col d-flex align-items-start">
             <div
               class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3"
             >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16">
-              <path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
-              <path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z"/>
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-door-open"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"
+                />
+                <path
+                  d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z"
+                />
+              </svg>
             </div>
             <div>
               <h3 class="fs-2 text-body-emphasis">Open Access.</h3>
-              <p>Enjoy all the app's features without any costs or hidden fees. It's your essential goal tracking companion, and it's free.</p>
+              <p>
+                Enjoy all the app's features without any costs or hidden fees.
+                It's your essential goal tracking companion, and it's free.
+              </p>
             </div>
           </div>
           <div class="col d-flex align-items-start">
             <div
               class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-lock"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"
+                />
               </svg>
             </div>
             <div>
               <h3 class="fs-2 text-body-emphasis">Enhanced Security.</h3>
-              <p>We prioritize your privacy and security. With advanced password hashing techniques, your data remains protected and confidential.</p>
+              <p>
+                We prioritize your privacy and security. With advanced password
+                hashing techniques, your data remains protected and
+                confidential.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-	<!-- Testimonial -->
+    <!-- Testimonial -->
     <section id="testimonial">
       <div class="p-5 text-center bg-body-tertiary">
         <div class="container py-5">
           <h2 class="text-body-emphasis">
-            "As the creator of this web application, I have a biased opinion, but I like it."
+            "As the creator of this web application, I have a biased opinion,
+            but I like it."
           </h2>
-          <img src="{{ url_for('static', filename='assets/img/avatar.jpg') }}" alt="Tautminas Cibulskis" class="profile-img mt-5" />
+          <img
+            src="{{ url_for('static', filename='assets/img/avatar.jpg') }}"
+            alt="Tautminas Cibulskis"
+            class="profile-img mt-5"
+          />
           <p class="col-lg-8 mx-auto lead mt-2">Tautminas, Vilnius</p>
         </div>
 
@@ -140,7 +208,9 @@
                 <use xlink:href="#bootstrap"></use>
               </svg>
             </a>
-            <p class="text-body-secondary">© <span id="current-year"></span> Goals Minder</p>
+            <p class="text-body-secondary">
+              © <span id="current-year"></span> Goals Minder
+            </p>
           </div>
 
           <div class="col mb-3"></div>
@@ -149,10 +219,16 @@
             <h5>Quick Links</h5>
             <ul class="nav flex-column">
               <li class="nav-item mb-2">
-                <a href="javascript:document.getElementById('title').scrollIntoView({ behavior: 'smooth' });" class="nav-link p-0 text-body-secondary">Login</a>
+                <a
+                  href="javascript:document.getElementById('title').scrollIntoView({ behavior: 'smooth' });"
+                  class="nav-link p-0 text-body-secondary"
+                  >Login</a
+                >
               </li>
               <li class="nav-item mb-2">
-                <a href="{{ url_for('register') }}" class="nav-link p-0 text-body-secondary"
+                <a
+                  href="{{ url_for('register') }}"
+                  class="nav-link p-0 text-body-secondary"
                   >Create a new account</a
                 >
               </li>
@@ -163,16 +239,34 @@
             <h5>Technologies Used</h5>
             <ul class="nav flex-column">
               <li class="nav-item mb-2">
-                <a href="https://flask.palletsprojects.com/en/3.0.x/" target="_blank" class="nav-link p-0 text-body-secondary">Flask</a>
+                <a
+                  href="https://flask.palletsprojects.com/en/3.0.x/"
+                  target="_blank"
+                  class="nav-link p-0 text-body-secondary"
+                  >Flask</a
+                >
               </li>
               <li class="nav-item mb-2">
-                <a href="https://jinja.palletsprojects.com/en/3.1.x/" target="_blank" class="nav-link p-0 text-body-secondary">Jinja</a>
+                <a
+                  href="https://jinja.palletsprojects.com/en/3.1.x/"
+                  target="_blank"
+                  class="nav-link p-0 text-body-secondary"
+                  >Jinja</a
+                >
               </li>
               <li class="nav-item mb-2">
-                <a href="https://www.sqlalchemy.org/" target="_blank" class="nav-link p-0 text-body-secondary">SQLAlchemy</a>
+                <a
+                  href="https://www.sqlalchemy.org/"
+                  target="_blank"
+                  class="nav-link p-0 text-body-secondary"
+                  >SQLAlchemy</a
+                >
               </li>
               <li class="nav-item mb-2">
-                <a href="https://getbootstrap.com/" target="_blank" class="nav-link p-0 text-body-secondary"
+                <a
+                  href="https://getbootstrap.com/"
+                  target="_blank"
+                  class="nav-link p-0 text-body-secondary"
                   >Bootstrap</a
                 >
               </li>
@@ -183,15 +277,28 @@
             <h5>About the Author</h5>
             <ul class="nav flex-column">
               <li class="nav-item mb-2">
-                <a href="https://github.com/tautminas" target="_blank" class="nav-link p-0 text-body-secondary">Github</a>
+                <a
+                  href="https://github.com/tautminas"
+                  target="_blank"
+                  class="nav-link p-0 text-body-secondary"
+                  >Github</a
+                >
               </li>
               <li class="nav-item mb-2">
-                <a href="https://www.codewars.com/users/tautminas" target="_blank" class="nav-link p-0 text-body-secondary"
+                <a
+                  href="https://www.codewars.com/users/tautminas"
+                  target="_blank"
+                  class="nav-link p-0 text-body-secondary"
                   >Codewars</a
                 >
               </li>
               <li class="nav-item mb-2">
-                <a href="https://www.chess.com/member/tautminas" target="_blank" class="nav-link p-0 text-body-secondary">Chess.com</a>
+                <a
+                  href="https://www.chess.com/member/tautminas"
+                  target="_blank"
+                  class="nav-link p-0 text-body-secondary"
+                  >Chess.com</a
+                >
               </li>
             </ul>
           </div>
@@ -201,7 +308,7 @@
 
     <script>
       const currentYear = new Date().getFullYear();
-      document.getElementById('current-year').textContent = currentYear;
+      document.getElementById("current-year").textContent = currentYear;
     </script>
-	</body>
+  </body>
 </html>

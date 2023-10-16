@@ -1,97 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Goals Minder</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-</head>
-<body class="soft-mint-green">
-
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="soft-mint-green">
     <div class="container">
-        <div class="row">
-            <div class="col-4 offset-4 text-center">
-                <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary mb-4 mt-4">Logout</a>
-            </div>
+      <div class="row">
+        <div class="col-4 offset-4 text-center">
+          <a
+            href="{{ url_for('logout') }}"
+            class="btn btn-outline-secondary mb-4 mt-4"
+            >Logout</a
+          >
         </div>
+      </div>
     </div>
 
     <div class="container mt-5">
-        <div class="text-center">
-            <h1>Let's track to crack!</h1>
-        </div>
+      <div class="text-center">
+        <h1>Let's track to crack!</h1>
+      </div>
 
-        <h2>Create a New Goal</h2>
-        <form method="POST" action="{{ url_for('index') }}">
-            {{ form.hidden_tag() }}
-            <div class="mb-3">
-                <label for="description" class="form-label">Goal Description:</label>
-                {{ form.description(class="form-control") }}
-            </div>
-            <div class="mb-3">
-                <label for="completion_percentage" class="form-label">Completion Percentage:</label>
-                {{ form.completion_percentage(class="form-control") }}
-            </div>
-            <div>
-                <button type="submit" class="btn btn-primary">Create Goal</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="container mt-5">
+      <h2>Create a New Goal</h2>
+      <form method="POST" action="{{ url_for('index') }}">
+        {{ form.hidden_tag() }}
         <div class="mb-3">
-            <h2>Your Goals:</h2>
+          <label for="description" class="form-label">Goal Description:</label>
+          {{ form.description(class="form-control") }}
         </div>
-            <ul>
-                {% for goal in user.goals %}
-                <li class="mb-3">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="mb-0"><strong>{{ goal.description }}</strong> ({{ goal.completion_percentage }}%)</p>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center justify-content-end">
-                            <button class="show-hide-btn btn btn-success me-2">Recharge Your Objective</button>
-                            <form method="POST" action="{{ url_for('delete_goal', goal_id=goal.id) }}" class="delete-form mb-0">
-                                {{ form.hidden_tag() }}
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-
-                    <div class="goal-details update-form">
-                        <form method="POST" action="{{ url_for('update_goal', goal_id=goal.id) }}">
-                            {{ form.hidden_tag() }}
-                            <div class="mb-3">
-                                <label for="new_description" class="form-label">Update Description:</label>
-                                <input type="text" name="new_description" value="{{ goal.description }}" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label for="new_completion_percentage" class="form-label">Update Completion Percentage:</label>
-                                <input type="number" name="new_completion_percentage" value="{{ goal.completion_percentage }}" min="0" max="100" class="form-control">
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Update</button>
-                        </form>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+        <div class="mb-3">
+          <label for="completion_percentage" class="form-label"
+            >Completion Percentage:</label
+          >
+          {{ form.completion_percentage(class="form-control") }}
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Create Goal</button>
+        </div>
+      </form>
     </div>
 
-<script>
-    const showHideButtons = document.querySelectorAll('.show-hide-btn');
-    showHideButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const container = button.closest('li');
-            const updateForm = container.querySelector('.update-form');
-            updateForm.classList.toggle('goal-details');
-        });
-    });
-</script>
+    <div class="container mt-5">
+      <div class="mb-3">
+        {% if user.goals %}
+        <h2>Your Goals:</h2>
+        {% endif %}
+      </div>
+      <ul>
+        {% for goal in user.goals %}
+        <li class="mb-3">
+          <div class="row">
+            <div class="col-md-6">
+              <p class="mb-0">
+                <strong>{{ goal.description }}</strong> ({{
+                goal.completion_percentage }}%)
+              </p>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-center justify-content-end">
+                <button class="show-hide-btn btn btn-success me-2">
+                  Recharge Your Objective
+                </button>
+                <form
+                  method="POST"
+                  action="{{ url_for('delete_goal', goal_id=goal.id) }}"
+                  class="delete-form mb-0"
+                >
+                  {{ form.hidden_tag() }}
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
 
-</body>
+          <div class="goal-details update-form">
+            <form
+              method="POST"
+              action="{{ url_for('update_goal', goal_id=goal.id) }}"
+            >
+              {{ form.hidden_tag() }}
+              <div class="mb-3">
+                <label for="new_description" class="form-label"
+                  >Update Description:</label
+                >
+                <input
+                  type="text"
+                  name="new_description"
+                  value="{{ goal.description }}"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="new_completion_percentage" class="form-label"
+                  >Update Completion Percentage:</label
+                >
+                <input
+                  type="number"
+                  name="new_completion_percentage"
+                  value="{{ goal.completion_percentage }}"
+                  min="0"
+                  max="100"
+                  class="form-control"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                Update
+              </button>
+            </form>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <script>
+      const showHideButtons = document.querySelectorAll(".show-hide-btn");
+      showHideButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const container = button.closest("li");
+          const updateForm = container.querySelector(".update-form");
+          updateForm.classList.toggle("goal-details");
+        });
+      });
+    </script>
+  </body>
 </html>

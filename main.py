@@ -175,10 +175,6 @@ def delete_goal(goal_id):
     return redirect(url_for('index'))
 
 
-@app.route("/<goal>/<int:days>")
-def goals(goal, days):
-    return render_template("goals_tracker.html", goal=goal, days=days)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
