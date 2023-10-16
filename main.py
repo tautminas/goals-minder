@@ -59,8 +59,8 @@ class LoginForm(FlaskForm):
 
 class GoalForm(FlaskForm):
     description = StringField('Goal Description', validators=[validators.DataRequired()])
-    completion_percentage = IntegerField('Completion Percentage', validators=[
-        validators.DataRequired(),
+    completion_percentage = IntegerField('Completion Percentage', [
+        validators.InputRequired("This field is required."),
         validators.NumberRange(min=0, max=100, message='Completion percentage must be between 0 and 100.')
     ])
 
