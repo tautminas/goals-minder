@@ -23,14 +23,14 @@
 				<div class="col-md-6 offset-md-3">
 					<h1>User Registration</h1>
 
-					<!-- Display flashed messages -->
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
-                            <ul class="flash-messages">
-                                {% for message in messages %}
-                                    <li>{{ message }}</li>
-                                {% endfor %}
-                            </ul>
+                            <div class="mt-4 mb-3">
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    {{ messages[-1] }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
                         {% endif %}
                     {% endwith %}
 

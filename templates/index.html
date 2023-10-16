@@ -16,19 +16,18 @@
 			<div class="row">
 				<div class="col-md-6 offset-md-3">
 					<h1 class="text-center mt-4">Track your goals to achieve them!</h1>
-<!--					<img src="./static/assets/img/logo.png" class="d-block mx-auto my-4 max-200x200" alt="Goals Minder application logotype with mountains">-->
 					<h2 class="text-center"></h2>
 
-					<!-- Display flashed messages -->
 					{% with messages = get_flashed_messages() %}
-						{% if messages %}
-							<ul class="flash-messages">
-								{% for message in messages %}
-									<li>{{ message }}</li>
-								{% endfor %}
-							</ul>
-						{% endif %}
-					{% endwith %}
+                        {% if messages %}
+                            <div class="mt-4 mb-3">
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    {{ messages[-1] }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
 
 					<form method="POST" action="{{ url_for('index') }}" class="mb-4">
 						{{ form.hidden_tag() }}
