@@ -32,3 +32,11 @@
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
+
+.soft-mint-green {
+  background-color: #96C291;
+}
+
+.content-fitter {
+  width: fit-content;
+}
