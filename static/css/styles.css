@@ -37,6 +37,11 @@
   background-color: #96C291;
 }
 
+.pale {
+  background-color: #F4EEEE;
+}
+
+
 .content-fitter {
   width: fit-content;
 }

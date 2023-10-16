@@ -1,9 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, flash, session, request
+from flask import Flask, render_template, redirect, url_for, flash, session, request, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import inspect
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField, validators
 from wtforms.validators import DataRequired, Email
+from werkzeug.exceptions import HTTPException
 from flask_bcrypt import Bcrypt
 import os
 
@@ -65,8 +66,15 @@ class GoalForm(FlaskForm):
     ])
 
 
+@app.errorhandler(HTTPException)
+def handle_error(e):
+    return render_template('error.html', error_code=e.code), e.code
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if 'user_id' in session:
+        abort(404)
     form = RegistrationForm()
     if form.validate_on_submit():
         name = form.name.data
@@ -97,7 +105,8 @@ def index():
             description = form.description.data
             completion_percentage = form.completion_percentage.data
 
-            goal = Goal(description=description, completion_percentage=completion_percentage, user_id=session['user_id'])
+            goal = Goal(description=description, completion_percentage=completion_percentage,
+                        user_id=session['user_id'])
             db.session.add(goal)
             db.session.commit()
 
